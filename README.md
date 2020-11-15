@@ -7,7 +7,7 @@ Features
 ---
 
 Configurable:
-- twitter account to tweet from: [https://www.twitter.com/lcptuk](@lcptuk)
+- twitter account to tweet from: [@lcptuk](https://www.twitter.com/lcptuk)
 - raindrop account to take from: X
 - raindrop tag to select from: default #post-to-twitter
 - frequency: [default] every 10 minutes
