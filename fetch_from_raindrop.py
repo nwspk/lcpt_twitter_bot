@@ -1,6 +1,11 @@
 #! /usr/bin/env python3
 # coding: utf-8
 
+'''
+TODO write tests and mock APIs
+'''
+
+import time
 import random
 from pprint import pprint as pp
 
@@ -120,12 +125,20 @@ def publish_item(item):
 
 def main():
     '''
+    TODO might be cleaner not to fetch whole Raindrop library every 10 min & instead batch
+    TODO separate out the task from the scheduling
     '''
 
-    items = fetch_items()
-    item = choose_item(items=items)
-    publishable = transform_item(item=item)
-    publish_item(item=publishable)
+    every_x_minutes = 10
+
+    while True:
+
+        items = fetch_items()
+        item = choose_item(items=items)
+        publishable = transform_item(item=item)
+        publish_item(item=publishable)
+
+        time.sleep(60*every_x_minutes)
 
     return
 
