@@ -89,16 +89,31 @@ def publish_item(item):
     TODO using TweetPublisher class
     '''
 
-    print('Tweeting is not yet implemented so here is the tweet in the CLI: {}'.format(item))
+    authhandler_creds = {
+        'consumer_key':    CREDENTIALS['twitter']['consumer_key'],
+        'consumer_secret': CREDENTIALS['twitter']['consumer_secret'],
+        }
+    access_token_creds = {
+        'key':    CREDENTIALS['twitter']['access_token']['key'],
+        'secret': CREDENTIALS['twitter']['access_token']['secret'],
+        }
 
-    '''
-    twitter_auth = tweepy.OAuthHandler("CONSUMER_KEY", "CONSUMER_SECRET")
-    twitter_auth.set_access_token("ACCESS_TOKEN", "ACCESS_TOKEN_SECRET")
+    twitter_auth = tweepy.OAuthHandler(**authhandler_creds)
+    twitter_auth.set_access_token(**access_token_creds)
 
-    twitter_api = tweepy.API(twitter_auth)
+    twitter_api = tweepy.API(twitter_auth,
+        wait_on_rate_limit=True,
+        wait_on_rate_limit_notify=True,
+        )
 
-    twitter_api.update_status(item)
-    '''
+    try:
+        twitter_api.verify_credentials()
+        print('Authentication OK')
+    except:
+        print('Error during authentication to Twitter')
+
+    print('Tweeting is not yet implemented so here is the tweet in the CLI:\n\n{}\n\n==='.format(item))
+    #twitter_api.update_status(status=item)
 
     return
 
