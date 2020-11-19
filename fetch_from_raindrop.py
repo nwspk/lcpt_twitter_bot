@@ -116,11 +116,11 @@ def publish_item(item):
     try:
         twitter_api.verify_credentials()
         print('Authentication OK')
+        twitter_api.update_status(status=item)
     except:
         print('Error during authentication to Twitter')
-
-    print('Tweeting is not yet implemented so here is the tweet in the CLI:\n\n{}\n\n==='.format(item))
-    #twitter_api.update_status(status=item)
+    finally:
+        print('Tweeting is not yet implemented so here is the tweet in the CLI:\n\n{}\n\n==='.format(item))
 
     return
 
