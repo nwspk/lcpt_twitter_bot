@@ -17,7 +17,7 @@ from raindropio import API
 from raindropio import Raindrop
 from raindropio import CollectionRef
 
-with open('test_credentials.yaml', 'r') as ifile:
+with open('credentials.yaml', 'r') as ifile:
     CREDENTIALS = yaml.load(ifile, Loader=yaml.FullLoader)
 
 
