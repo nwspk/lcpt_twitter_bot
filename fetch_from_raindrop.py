@@ -61,7 +61,7 @@ def choose_item(items):
     try:
         item = choose_one(items)
     except IndexError:
-        raise Error ## TODO improve raised error clarity
+        raise Exception ## TODO improve raised error clarity
 
     return item
 
