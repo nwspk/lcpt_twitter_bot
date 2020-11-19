@@ -146,5 +146,4 @@ def main():
 if __name__ == '__main__':
 
     main()
-    from code import interact; interact(local=dict(globals(), **locals()))
 
