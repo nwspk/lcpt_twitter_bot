@@ -24,14 +24,16 @@ with open('credentials.yaml', 'r') as ifile:
 def fetch_items():
     '''
     TODO using a RaindropFetcher and its method
+    TODO collection id as input argument - or credential ?
     '''
 
     raindrop_api = API(**CREDENTIALS['raindrop'])
+    collection_id = CollectionRef({ '$id': 14623292 })
 
     items = []
 
     page = 0
-    while (page_items:=Raindrop.search(raindrop_api, collection=CollectionRef.Unsorted, page=page)):
+    while (page_items:=Raindrop.search(api=raindrop_api, collection=collection_id, page=page)):
         items.extend(page_items)
         page += 1
 
