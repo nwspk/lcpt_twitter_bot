@@ -9,27 +9,27 @@ How to configure
 
 The following features are customisable by changing their values in the [config file](https://github.com/nwspk/lcpt_twitter_bot/blob/main/config.yml):
 
-- `interval`: an integer, the amount of minutes between posting tweets. eg. `60`
-- `raindrop_tag`: a string, only library items with this tag will be selected in the Raindrop collection. eg. `'post-to-twitter'`
-- `tweet_format`: a string, the content of the tweet with placeholders with the library item attributes.
+- **interval**: an integer, the amount of minutes between posting tweets. eg. `60`
+- **raindrop_tag**: a string, only library items with this tag will be selected in the Raindrop collection. eg. `'post-to-twitter'`
+- **tweet_format**: a string, the content of the tweet with placeholders with the library item attributes.
 
 ### Tweet format
 
 The tweet will always display the raindrop cover image of the raindrop library item when possible.
 
 Available library item attributes are:
-  - `title`
-  - `url`
-  - `description`
-  - `tags` formatted as `'#tag1 #tag2 #tag3'`
+  - `{title}`
+  - `{url}`
+  - `{description}`
+  - `{tags}` that will show as `#tag1 #tag2 #tag3`
 
 The most up-to-date available library item attributes can be seen in the [`content` dictionary](https://github.com/nwspk/lcpt_twitter_bot/blob/a0681d91434cb187693a108b011c569ee936a0e3/fetch_from_raindrop.py#L97-L102)
 
-The `tweet_format` string follows the rules of python string formatting: https://pyformat.info/.
+The `tweet_format` string follows the rules of python**3** string formatting: https://pyformat.info/.
 
-A `tweet_format` example is '{title:.100}\n\n{url}' where the title is **truncated** after 100 characters.
+A `tweet_format` example is `'{title:.100}\n\n{url}'` where the title is **truncated** after 100 characters.
 
-**/!\** A tweet won't be posted if it is over 280 characters.
+> :warning: A tweet won't be posted if it is over 280 characters.
 
 
 How to run
