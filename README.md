@@ -9,6 +9,7 @@ How to configure
 
 The following features are customisable by changing their values in the [config file](https://github.com/nwspk/lcpt_twitter_bot/blob/main/config.yml):
 
+- **running**: a boolean, `true` or `false`, turns the bot on and off
 - **interval**: an integer, the amount of minutes between posting tweets. eg. `60`
 - **raindrop_tag**: a string, only library items with this tag will be selected in the Raindrop collection. eg. `'post-to-twitter'`
 - **tweet_format**: a string, the content of the tweet with placeholders with the library item attributes.

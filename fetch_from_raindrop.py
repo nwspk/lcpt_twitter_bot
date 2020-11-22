@@ -8,9 +8,12 @@ TODO write tests and mock APIs
 import os
 import time
 import random
+import datetime
+from datetime import timedelta
 from pprint import pprint as pp
 
 import yaml
+import pytz
 import tweepy
 import requests
 
@@ -191,22 +194,76 @@ def publish_item(item):
     return
 
 
-def main():
+def bot():
     '''
     TODO might be cleaner not to fetch whole Raindrop library every 10 min & instead batch
     TODO separate out the task from the scheduling
     '''
 
+    items = fetch_items()
+    item = choose_item(items=items)
+    publishable = transform_item(item=item)
+    publish_item(item=publishable)
+
+    return
+
+
+def fetch_interval_since_last_tweet():
+    '''
+    '''
+
+    authhandler_creds = {
+        'consumer_key':    CREDENTIALS['twitter']['consumer_key'],
+        'consumer_secret': CREDENTIALS['twitter']['consumer_secret'],
+        }
+    access_token_creds = {
+        'key':    CREDENTIALS['twitter']['access_token']['key'],
+        'secret': CREDENTIALS['twitter']['access_token']['secret'],
+        }
+
+    twitter_auth = tweepy.OAuthHandler(**authhandler_creds)
+    twitter_auth.set_access_token(**access_token_creds)
+
+    api = twitter_api = tweepy.API(twitter_auth,
+        wait_on_rate_limit=True,
+        wait_on_rate_limit_notify=True,
+        )
+
+    twitter_account_id = twitter_api.me().id
+    latest_tweets = twitter_api.user_timeline(user_id=twitter_account_id, count=1)
+
+    latest_tweet = latest_tweets[0]
+    time_latest = latest_tweet.created_at
+
+    last_tweeted_at = pytz.utc.localize(time_latest)
+    now = datetime.datetime.now(tz=datetime.timezone.utc)
+
+    interval = now - last_tweeted_at
+
+    return interval
+
+
+def main():
+    '''
+    polling
+    '''
+
+    polling_interval = 5
+
     while True:
 
-        interval = load_config()['interval']
+        is_running = load_config()['running']
+        interval_since_last_tweet = fetch_interval_since_last_tweet()
 
-        items = fetch_items()
-        item = choose_item(items=items)
-        publishable = transform_item(item=item)
-        publish_item(item=publishable)
+        minimum_tweeting_interval = load_config()['interval']
+        minimum_tweeting_interval = timedelta(minutes=minimum_tweeting_interval)
 
-        time.sleep(60*interval)
+        time_to_tweet_again = interval_since_last_tweet > minimum_tweeting_interval
+
+        if is_running and time_to_tweet_again:
+            bot()
+
+        time.sleep(60*polling_interval)
 
     return
 
