@@ -23,9 +23,23 @@ with open('credentials.yaml', 'r') as ifile:
 
 
 def load_config():
+    '''
+    '''
 
-    with open('config.yml', 'r') as ifile:
-        config = yaml.load(ifile, Loader=yaml.FullLoader)
+    url = 'https://raw.githubusercontent.com/nwspk/lcpt_twitter_bot/main/config.yml'
+    response = requests.get(url)
+
+    try:
+
+        if response.status_code != 200:
+            raise Exception('Unable to download')
+
+        config = yaml.safe_load(response.text)
+
+    except:
+
+        with open('config.yml', 'r') as ifile:
+            config = yaml.load(ifile, Loader=yaml.FullLoader)
 
     return config
 
