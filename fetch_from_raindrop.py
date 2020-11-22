@@ -21,6 +21,14 @@ with open('credentials.yaml', 'r') as ifile:
     CREDENTIALS = yaml.load(ifile, Loader=yaml.FullLoader)
 
 
+def load_config():
+
+    with open('config.yml', 'r') as ifile:
+        config = yaml.load(ifile, Loader=yaml.FullLoader)
+
+    return config
+
+
 def fetch_items():
     '''
     TODO using a RaindropFetcher and its method
@@ -48,7 +56,8 @@ def choose_item(items):
       - randomly choosing
     '''
 
-    raindrop_tag = 'post-to-twitter'
+    raindrop_tag = load_config()['raindrop_tag']
+
     already_tweeted = set()
     choose_one = random.choice
 
@@ -131,16 +140,16 @@ def main():
     TODO separate out the task from the scheduling
     '''
 
-    every_x_minutes = 10
-
     while True:
+
+        interval = load_config()['interval']
 
         items = fetch_items()
         item = choose_item(items=items)
         publishable = transform_item(item=item)
         publish_item(item=publishable)
 
-        time.sleep(60*every_x_minutes)
+        time.sleep(60*interval)
 
     return
 

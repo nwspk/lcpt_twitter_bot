@@ -1,0 +1,5 @@
+
+interval: 60 # in minutes
+raindrop_tag: 'post-to-twitter'
+tweet_format: '{title:.100}\n\n{url}' #.100 is truncation, follows the rules of python string formatting: https://pyformat.info/
+
