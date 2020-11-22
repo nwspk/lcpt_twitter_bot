@@ -5,13 +5,14 @@
 TODO write tests and mock APIs
 '''
 
+import os
 import time
 import random
 from pprint import pprint as pp
 
 import yaml
-
 import tweepy
+import requests
 
 from raindropio import API
 from raindropio import Raindrop
@@ -100,7 +101,10 @@ def transform_item(item):
         'tags': ' '.join([ '#{}'.format(t) for t in item.tags ]),
         }
 
-    publishable = tweet_format.format(**content)
+    publishable = {
+        'string': tweet_format.format(**content),
+        'image_url': item.cover,
+        }
 
     return publishable
 
@@ -127,14 +131,38 @@ def publish_item(item):
         wait_on_rate_limit_notify=True,
         )
 
+    def tweet_image(url, message):
+        '''
+        '''
+
+        fp = '/tmp/temp.jpg'
+        request = requests.get(url, stream=True)
+
+        if request.status_code != 200:
+            raise Exception('Unable to download image')
+
+        with open(fp, 'wb') as image:
+            for chunk in request:
+                image.write(chunk)
+
+        twitter_api.update_with_media(fp, status=message)
+        os.remove(fp)
+
+        return
+
     try:
         twitter_api.verify_credentials()
         print('Authentication OK')
-        twitter_api.update_status(status=item)
-    except:
-        print('Error during authentication to Twitter')
+
+        tweet_image(url=item['image_url'], message=item['string'])
+
+    except Exception as error:
+        print(error)
+
+        #twitter_api.update_status(status=item['string'])
+
     finally:
-        print('Tweeting is not yet implemented so here is the tweet in the CLI:\n\n{}\n\n==='.format(item))
+        print('Tweeting is not yet implemented so here is the tweet in the CLI:\n\n{}\n\n==='.format(item['string']))
 
     return
 
