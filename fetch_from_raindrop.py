@@ -111,8 +111,10 @@ def transform_item(item):
 
 def publish_item(item):
     '''
-    TODO using TweetPublisher class
+    TODO have a Tweet class (subclassed from Item) with transform and publish methods ? images are published differently than simple text updates
     '''
+
+    default_image_url = load_config()['default_image_url']
 
     authhandler_creds = {
         'consumer_key':    CREDENTIALS['twitter']['consumer_key'],
@@ -153,16 +155,24 @@ def publish_item(item):
     try:
         twitter_api.verify_credentials()
         print('Authentication OK')
+    except:
+        pass
 
+    try:
         tweet_image(url=item['image_url'], message=item['string'])
 
     except Exception as error:
         print(error)
+        try:
+            tweet_image(url=default_image_url, message=item['string'])
 
-        #twitter_api.update_status(status=item['string'])
+        except Exception as error:
+            print(error)
 
-    finally:
-        print('Tweeting is not yet implemented so here is the tweet in the CLI:\n\n{}\n\n==='.format(item['string']))
+            twitter_api.update_status(status=item['string'])
+
+
+    print('===\n\n{}\n\n==='.format(item['string']))
 
     return
 

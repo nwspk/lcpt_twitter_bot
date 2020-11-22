@@ -12,6 +12,7 @@ The following features are customisable by changing their values in the [config 
 - **interval**: an integer, the amount of minutes between posting tweets. eg. `60`
 - **raindrop_tag**: a string, only library items with this tag will be selected in the Raindrop collection. eg. `'post-to-twitter'`
 - **tweet_format**: a string, the content of the tweet with placeholders with the library item attributes.
+- **default_image_url**: a string, the link to the image to display with the tweet if the library item doesn't have a corresponding image. The image will be reframed by twitter.
 
 ### Tweet format
 
