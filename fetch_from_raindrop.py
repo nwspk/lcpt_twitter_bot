@@ -90,12 +90,17 @@ def transform_item(item):
 
         return clean_url
 
+    tweet_format = load_config()['tweet_format']
+    tweet_format = tweet_format.encode('utf-8').decode('unicode_escape')
+
     content = {
         'title': item.title,
         'url':   remove_url_get_params(item.link),
+        'description': item.excerpt,
+        'tags': ' '.join([ '#{}'.format(t) for t in item.tags ]),
         }
 
-    publishable = '{title:.100}\n\n{url}'.format(**content)
+    publishable = tweet_format.format(**content)
 
     return publishable
 
