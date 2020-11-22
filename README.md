@@ -122,8 +122,3 @@ You may want to run this bot locally to test it, or if you don't need the featur
   Then press `Ctrl-c` to stop the bot, and press `Ctrl-a` then `b` to return to normal.
 
 
-Where to configure main features:
----
-
-TODO
-

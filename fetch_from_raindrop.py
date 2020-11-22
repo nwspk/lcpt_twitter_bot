@@ -5,46 +5,23 @@
 TODO write tests and mock APIs
 '''
 
-import os
 import time
 import random
-import datetime
 from datetime import timedelta
 from pprint import pprint as pp
 
-import yaml
-import pytz
 import tweepy
-import requests
 
 from raindropio import API
 from raindropio import Raindrop
 from raindropio import CollectionRef
 
-with open('credentials.yaml', 'r') as ifile:
-    CREDENTIALS = yaml.load(ifile, Loader=yaml.FullLoader)
+from helpers import load_config
+from helpers import tweet_image
+from helpers import remove_url_get_params
+from helpers import fetch_interval_since_last_tweet
 
-
-def load_config():
-    '''
-    '''
-
-    url = 'https://raw.githubusercontent.com/nwspk/lcpt_twitter_bot/main/config.yml'
-    response = requests.get(url)
-
-    try:
-
-        if response.status_code != 200:
-            raise Exception('Unable to download')
-
-        config = yaml.safe_load(response.text)
-
-    except:
-
-        with open('config.yml', 'r') as ifile:
-            config = yaml.load(ifile, Loader=yaml.FullLoader)
-
-    return config
+from helpers import CREDENTIALS
 
 
 def fetch_items():
@@ -98,16 +75,6 @@ def transform_item(item):
     beautify, augment, structure published content
     '''
 
-    def remove_url_get_params(url):
-        '''
-        clean up link
-        TODO maybe even more sense to do a .find() and index
-        '''
-
-        clean_url = url.split('?')[0]
-
-        return clean_url
-
     tweet_format = load_config()['tweet_format']
     tweet_format = tweet_format.encode('utf-8').decode('unicode_escape')
 
@@ -150,25 +117,6 @@ def publish_item(item):
         wait_on_rate_limit_notify=True,
         )
 
-    def tweet_image(url, message):
-        '''
-        '''
-
-        fp = '/tmp/temp.jpg'
-        request = requests.get(url, stream=True)
-
-        if request.status_code != 200:
-            raise Exception('Unable to download image')
-
-        with open(fp, 'wb') as image:
-            for chunk in request:
-                image.write(chunk)
-
-        twitter_api.update_with_media(fp, status=message)
-        os.remove(fp)
-
-        return
-
     try:
         twitter_api.verify_credentials()
         print('Authentication OK')
@@ -176,12 +124,12 @@ def publish_item(item):
         pass
 
     try:
-        tweet_image(url=item['image_url'], message=item['string'])
+        tweet_image(api=twitter_api, url=item['image_url'], message=item['string'])
 
     except Exception as error:
         print(error)
         try:
-            tweet_image(url=default_image_url, message=item['string'])
+            tweet_image(api=twitter_api, url=default_image_url, message=item['string'])
 
         except Exception as error:
             print(error)
@@ -206,41 +154,6 @@ def bot():
     publish_item(item=publishable)
 
     return
-
-
-def fetch_interval_since_last_tweet():
-    '''
-    '''
-
-    authhandler_creds = {
-        'consumer_key':    CREDENTIALS['twitter']['consumer_key'],
-        'consumer_secret': CREDENTIALS['twitter']['consumer_secret'],
-        }
-    access_token_creds = {
-        'key':    CREDENTIALS['twitter']['access_token']['key'],
-        'secret': CREDENTIALS['twitter']['access_token']['secret'],
-        }
-
-    twitter_auth = tweepy.OAuthHandler(**authhandler_creds)
-    twitter_auth.set_access_token(**access_token_creds)
-
-    api = twitter_api = tweepy.API(twitter_auth,
-        wait_on_rate_limit=True,
-        wait_on_rate_limit_notify=True,
-        )
-
-    twitter_account_id = twitter_api.me().id
-    latest_tweets = twitter_api.user_timeline(user_id=twitter_account_id, count=1)
-
-    latest_tweet = latest_tweets[0]
-    time_latest = latest_tweet.created_at
-
-    last_tweeted_at = pytz.utc.localize(time_latest)
-    now = datetime.datetime.now(tz=datetime.timezone.utc)
-
-    interval = now - last_tweeted_at
-
-    return interval
 
 
 def main():
