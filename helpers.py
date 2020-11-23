@@ -10,10 +10,9 @@ import requests
 try:
     with open('credentials.yaml', 'r') as ifile:
         CREDENTIALS = yaml.load(ifile, Loader=yaml.FullLoader)
-except:
-    pass
+except Exception as error:
+    print(error)
 
-try:
     CREDENTIALS = {
         'raindrop': {
             'client_id': os.environ['RAINDROP_CLIENT_ID'],
@@ -29,8 +28,6 @@ try:
                 },
             },
         }
-except:
-    pass
 
 
 def load_config():
