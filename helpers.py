@@ -7,9 +7,30 @@ import pytz
 import tweepy
 import requests
 
+try:
+    with open('credentials.yaml', 'r') as ifile:
+        CREDENTIALS = yaml.load(ifile, Loader=yaml.FullLoader)
+except:
+    pass
 
-with open('credentials.yaml', 'r') as ifile:
-    CREDENTIALS = yaml.load(ifile, Loader=yaml.FullLoader)
+try:
+    CREDENTIALS = {
+        'raindrop': {
+            'client_id': os.environ['RAINDROP_CLIENT_ID'],
+            'client_secret': os.environ['RAINDROP_CLIENT_SECRET'],
+            'token': os.environ['RAINDROP_TOKEN'],
+            },
+        'twitter': {
+            'comsumer_key': os.environ['TWITTER_KEY'],
+            'consumer_secret': os.environ['TWITTER_SECRET'],
+            'access_token': {
+                'key': os.environ['TWITTER_ACCESS_TOKEN'],
+                'secret': os.environ['TWITTER_ACCESS_SECRET'],
+                },
+            },
+        }
+except:
+    pass
 
 
 def load_config():
