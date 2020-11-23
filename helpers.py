@@ -8,11 +8,6 @@ import tweepy
 import requests
 
 try:
-    with open('credentials.yaml', 'r') as ifile:
-        CREDENTIALS = yaml.load(ifile, Loader=yaml.FullLoader)
-except Exception as error:
-    print(error)
-
     CREDENTIALS = {
         'raindrop': {
             'client_id': os.environ['RAINDROP_CLIENT_ID'],
@@ -20,7 +15,7 @@ except Exception as error:
             'token': os.environ['RAINDROP_TOKEN'],
             },
         'twitter': {
-            'comsumer_key': os.environ['TWITTER_KEY'],
+            'consumer_key': os.environ['TWITTER_KEY'],
             'consumer_secret': os.environ['TWITTER_SECRET'],
             'access_token': {
                 'key': os.environ['TWITTER_ACCESS_TOKEN'],
@@ -28,6 +23,9 @@ except Exception as error:
                 },
             },
         }
+except Exception as error:
+    print(error)
+    raise
 
 
 def load_config():
