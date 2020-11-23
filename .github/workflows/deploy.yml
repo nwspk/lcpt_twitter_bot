@@ -31,7 +31,9 @@ jobs:
         run: ssh staging 'cd ~/lcpt_twitter_bot && git pull'
 
       - name: Start the bot
-        run: ssh staging 'cd ~/lcpt_twitter_bot && python3 run.py'
+        run: |
+          ssh staging 'echo "$RAINDROP_CLIENT_ID"'
+          ssh staging 'cd ~/lcpt_twitter_bot && python3 run.py'
         env:
           RAINDROP_CLIENT_ID: ${{ secrets.RAINDROP_CLIENT_ID }}
           RAINDROP_CLIENT_SECRET: ${{ secrets.RAINDROP_CLIENT_SECRET }}
