@@ -21,6 +21,13 @@ jobs:
             User $SSH_USER
             IdentityFile ~/.ssh/staging.key
             StrictHostKeyChecking no
+            SendEnv RAINDROP_CLIENT_ID
+            SendEnv RAINDROP_CLIENT_SECRET
+            SendEnv RAINDROP_TOKEN
+            SendEnv TWITTER_KEY
+            SendEnv TWITTER_SECRET
+            SendEnv TWITTER_ACCESS_TOKEN
+            SendEnv TWITTER_ACCESS_SECRET
           END
         env:
           SSH_USER: ${{ secrets.USERNAME }}
