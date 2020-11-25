@@ -1,6 +1,6 @@
 
 running: true
-interval: 10 # in minutes
+interval: 1 # in minutes
 raindrop_tag: 'post-to-twitter'
 tweet_format: '{title:.100}\n{url}' #.100 is truncation, follows the rules of python string formatting: https://pyformat.info/
 default_image_url: 'https://pbs.twimg.com/profile_images/1297106920428404738/j7wuIqwE_400x400.jpg'
