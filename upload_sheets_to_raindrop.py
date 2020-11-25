@@ -4,6 +4,7 @@
 '''
 '''
 
+import sys
 import csv
 import time
 from io import StringIO
@@ -17,7 +18,7 @@ from run import fetch_items
 from helpers import CREDENTIALS
 
 
-def main():
+def main(index_start=0):
     '''
     Adds links from google spreadsheet to raindrop unsorted collection
 
@@ -48,18 +49,25 @@ def main():
     raindrop_api = API(**CREDENTIALS['raindrop'])
     collection_id = CollectionRef({ '$id': 14623292 })
 
-    from code import interact; interact(local=dict(globals(), **locals()))
+    link_errors = []
 
-    for i, link in enumerate(links):
-        Raindrop.create(api=raindrop_api,
-            link=link,
-            pleaseParse=True,
-            tags=[ 'post-to-twitter', ],
-            collection=collection_id,
-            )
+    for i, link in enumerate(links[index_start:], start=index_start):
+
         print(i, link)
+        try:
+            Raindrop.create(api=raindrop_api,
+                link=link,
+                pleaseParse=True,
+                tags=[ 'post-to-twitter', ],
+                collection=collection_id,
+                )
+        except requests.exceptions.HTTPError:
+            link_errors.append(link)
 
-        time.sleep(5)
+        time.sleep(3)
+
+    for link in link_errors:
+        print(link)
 
     from code import interact; interact(local=dict(globals(), **locals()))
     return
@@ -67,5 +75,5 @@ def main():
 
 if __name__ == '__main__':
 
-    main()
+    main(index_start=int(sys.argv[1]))
 
