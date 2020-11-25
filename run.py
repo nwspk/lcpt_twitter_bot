@@ -5,9 +5,11 @@
 TODO write tests and mock APIs
 '''
 
+import logging
+logging.basicConfig(level=logging.INFO)
+
 import time
 import random
-import logging
 from datetime import timedelta
 from pprint import pprint as pp
 
@@ -24,7 +26,6 @@ from helpers import fetch_interval_since_last_tweet
 
 from helpers import CREDENTIALS
 
-logging.basicConfig(level=logging.DEBUG)
 
 def fetch_items():
     '''
@@ -42,7 +43,7 @@ def fetch_items():
         items.extend(page_items)
         page += 1
 
-    logging.info('collected {} items from raindrop'.format(len(items)))
+    logging.info('Collected {} items from Raindrop'.format(len(items)))
 
     return items
 
@@ -142,7 +143,7 @@ def publish_item(item):
             twitter_api.update_status(status=item['string'])
 
 
-    logging.info('===\n{}\n==='.format(item['string']))
+    logging.info('Tweeted:\n===\n{}\n==='.format(item['string']))
     return
 
 
@@ -172,10 +173,10 @@ def main():
 
         is_running = load_config()['running']
         interval_since_last_tweet = fetch_interval_since_last_tweet()
-        logging.info('Last tweet was {} minutes ago'.format(interval_since_last_tweet.seconds/60))
 
         minimum_tweeting_interval = load_config()['interval']
         minimum_tweeting_interval = timedelta(minutes=minimum_tweeting_interval)
+        logging.info('Last tweet was {} minutes ago and we tweet only every {} minutes'.format(interval_since_last_tweet.seconds/60, minimum_tweeting_interval.seconds/60))
 
         is_time_to_tweet_again = interval_since_last_tweet > minimum_tweeting_interval
         logging.info(f'Is time to tweet again ? {is_time_to_tweet_again}')

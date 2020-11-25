@@ -34,7 +34,7 @@ def load_config():
     '''
     '''
 
-    logging.info('Logging config ...')
+    logging.info('Loading config ...')
     url = 'https://raw.githubusercontent.com/nwspk/lcpt_twitter_bot/main/config.yml'
     response = requests.get(url)
 
