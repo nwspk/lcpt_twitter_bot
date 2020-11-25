@@ -1,7 +1,15 @@
 
+## see detailed instructions at https://github.com/nwspk/lcpt_twitter_bot#how-to-configure
+
+# boolean, true or false, turns the bot on and off
 running: true
-interval: 1 # in minutes
+
+# in minutes, the tweeting interval
+interval: 1
+
 raindrop_tag: 'post-to-twitter'
-tweet_format: '{title:.100}\n{url}' #.100 is truncation, follows the rules of python string formatting: https://pyformat.info/
+
+tweet_format: '{title:.100}\n{url}'
+
 default_image_url: 'https://www.dropbox.com/s/97g0fror3egbq9w/v3%20demo.jpg?dl=0'
 

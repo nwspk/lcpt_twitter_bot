@@ -1,7 +1,7 @@
 Twitter Bot Service with Raindrop Integration
 ===
 
-Service to automatically tweet selection of [raindrop.io](raindrop.io) items at regular intervals.
+Service to automatically tweet selection of [raindrop.io](raindrop.io) items at regular intervals via the [@lcptuk](https://twitter.com/lcptuk) twitter account.
 
 
 How to configure
@@ -13,7 +13,9 @@ The following features are customisable by changing their values in the [config 
 - **interval**: an integer, the amount of minutes between posting tweets. eg. `60`
 - **raindrop_tag**: a string, only library items with this tag will be selected in the Raindrop collection. eg. `'post-to-twitter'`
 - **tweet_format**: a string, the content of the tweet with placeholders with the library item attributes.
-- **default_image_url**: a string, the link to the image to display with the tweet if the library item doesn't have a corresponding image. The image will be reframed by twitter.
+- **default_image_url**: a string, the link to the image to display with the tweet if the library item doesn't have a corresponding image. The image will be reframed by twitter. If the image url doesn't work, twitter will gracefully fall back onto not displaying an image with the tweet.
+
+> The bot polls the config to check for changes every 5 minutes. Therefore there may be up to 5 minutes before any change is implemented. If the tweeting interval has changed to `X` min and there are `<X` min since the last tweet before the config was changed, the next tweet will be `X` min after the latest tweet.
 
 ### Tweet format
 
@@ -57,26 +59,23 @@ You may want to run this bot locally to test it, or if you don't need the featur
   $ cd lcpt_twitter_bot
   ```
 
-2. Create a `credential.txt` file with the twitter and raindrop authentication required inside the `lcpt_twitter_bot` folder.
+2. Create a `credentials.sh` file with the twitter and raindrop authentication required inside the `lcpt_twitter_bot` folder.
 
   ```shell
-  $ touch ./credentials.txt
+  $ touch ./credentials.sh
   ```
 
-  The `credential.txt` file should be laid out like this:
+  The `credential.sh` file should be laid out like this:
 
-  ```yaml
-  raindrop:
-    client_id: '<paste here>'
-    client_secret: '<paste here>'
-    token: '<paste here>'
+  ```sh
+  export RAINDROP_CLIENT_ID=<paste here>
+  export RAINDROP_CLIENT_SECRET=<paste here>
+  export RAINDROP_TOKEN=<paste here>
 
-  twitter:
-    consumer_key: '<paste here>'
-    consumer_secret: '<paste here>'
-    access_token:
-      key: '<paste here>'
-      secret: '<paste here>'
+  export TWITTER_KEY=<paste here> # twitter consumer key
+  export TWITTER_SECRET=<paste here> # twitter consumer secret
+  export TWITTER_ACCESS_TOKEN=<paste here> # twitter access token key
+  export TWITTER_ACCESS_SECRET=<paste here> # twitter access token secret
   ```
 
 3. Install required external libraries.
@@ -85,13 +84,13 @@ You may want to run this bot locally to test it, or if you don't need the featur
   $ pip3 install -r ./requirements.txt
   ```
 
-4. To do a test run:
+4. Start the bot.
 
   ```shell
-  $ python3 ./fetch_from_raindrop.py
+  $ python3 ./run.py
   ```
 
-  Stop by pressing `Ctrl-c`.
+  Stop the bot by pressing `Ctrl-c`.
 
 5. To run locally in the background (only works as long as you don't turn your computer off):
 
@@ -104,8 +103,8 @@ You may want to run this bot locally to test it, or if you don't need the featur
   If it returns `Screen version <etc>` you're good to go.
 
   ```shell
-  $ screen -S my_twitter_bot
-  $ python3 ./fetch_from_raindrop.py
+  $ screen -S bot
+  $ python3 ./run.py
   ```
 
   Wait a few seconds to check it's running fine. You shouldn't see any `Error`s returned.
@@ -116,9 +115,32 @@ You may want to run this bot locally to test it, or if you don't need the featur
   One way to stop the bot while your computer is still running is to type:
 
   ```shell
-  $ screen -r my_twitter_bot
+  $ screen -r bot
   ```
 
   Then press `Ctrl-c` to stop the bot, and press `Ctrl-a` then `b` to return to normal.
 
+
+Remotely on a server
+---
+
+These are instructions on how to admin the already running bot instance that is currently hosted on DigitalOcean.
+
+1. Find the remote host (=server) IP address:
+
+  Sign in to your Digital Ocean account and under **Projects** click on **raindrop twitter bot**. Under **Resources**, you should see **DROPLETS (1)** with the IP address. Keep track of the IP address.
+
+2. Open a terminal and connect to the remote server:
+
+  ```shell
+  $ ssh webmaster@<ip address>
+  ```
+
+  Enter the password when asked.
+
+3. The bot is running in a `screen`.
+
+  ```shell
+  $ screen -r bot
+  ```
 
