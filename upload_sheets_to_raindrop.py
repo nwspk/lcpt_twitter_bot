@@ -61,7 +61,8 @@ def main(index_start=0):
                 tags=[ 'post-to-twitter', ],
                 collection=collection_id,
                 )
-        except requests.exceptions.HTTPError:
+        except requests.exceptions.HTTPError as error:
+            print(error)
             link_errors.append(link)
 
         time.sleep(3)

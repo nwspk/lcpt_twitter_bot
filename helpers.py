@@ -1,5 +1,6 @@
 
 import os
+import logging
 import datetime
 
 import yaml
@@ -23,8 +24,9 @@ try:
                 },
             },
         }
+    logging.info('Loaded credentials from environment variables')
 except Exception as error:
-    print(error)
+    logging.error('Exception:', exc_info=True)
     raise
 
 
@@ -32,6 +34,7 @@ def load_config():
     '''
     '''
 
+    logging.info('Logging config ...')
     url = 'https://raw.githubusercontent.com/nwspk/lcpt_twitter_bot/main/config.yml'
     response = requests.get(url)
 

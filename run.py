@@ -7,6 +7,7 @@ TODO write tests and mock APIs
 
 import time
 import random
+import logging
 from datetime import timedelta
 from pprint import pprint as pp
 
@@ -23,6 +24,7 @@ from helpers import fetch_interval_since_last_tweet
 
 from helpers import CREDENTIALS
 
+logging.basicConfig(level=logging.DEBUG)
 
 def fetch_items():
     '''
@@ -39,6 +41,8 @@ def fetch_items():
     while (page_items:=Raindrop.search(api=raindrop_api, collection=collection_id, page=page)):
         items.extend(page_items)
         page += 1
+
+    logging.info('collected {} items from raindrop'.format(len(items)))
 
     return items
 
@@ -65,6 +69,7 @@ def choose_item(items):
     try:
         item = choose_one(items)
     except IndexError:
+        logging.error('items is empty')
         raise Exception ## TODO improve raised error clarity
 
     return item
@@ -119,7 +124,7 @@ def publish_item(item):
 
     try:
         twitter_api.verify_credentials()
-        print('Authentication OK')
+        logging.info('Authentication OK')
     except:
         pass
 
@@ -127,18 +132,17 @@ def publish_item(item):
         tweet_image(api=twitter_api, url=item['image_url'], message=item['string'])
 
     except Exception as error:
-        print(error)
+        logging.error('Exception:', exc_info=True)
         try:
             tweet_image(api=twitter_api, url=default_image_url, message=item['string'])
 
         except Exception as error:
-            print(error)
+            logging.error('Exception:', exc_info=True)
 
             twitter_api.update_status(status=item['string'])
 
 
-    print('===\n\n{}\n\n==='.format(item['string']))
-
+    logging.info('===\n{}\n==='.format(item['string']))
     return
 
 
@@ -161,21 +165,25 @@ def main():
     polling
     '''
 
+    logging.info('Bot started')
     polling_interval = 5
 
     while True:
 
         is_running = load_config()['running']
         interval_since_last_tweet = fetch_interval_since_last_tweet()
+        logging.info('Last tweet was {} minutes ago'.format(interval_since_last_tweet.seconds/60))
 
         minimum_tweeting_interval = load_config()['interval']
         minimum_tweeting_interval = timedelta(minutes=minimum_tweeting_interval)
 
-        time_to_tweet_again = interval_since_last_tweet > minimum_tweeting_interval
+        is_time_to_tweet_again = interval_since_last_tweet > minimum_tweeting_interval
+        logging.info(f'Is time to tweet again ? {is_time_to_tweet_again}')
 
-        if is_running and time_to_tweet_again:
+        if is_running and is_time_to_tweet_again:
             bot()
 
+        logging.info(f'Sleeping for {polling_interval} minutes ...')
         time.sleep(60*polling_interval)
 
     return
