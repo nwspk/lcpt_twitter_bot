@@ -13,7 +13,7 @@ The following features are customisable by changing their values in the [config 
 - **interval**: an integer, the amount of minutes between posting tweets. eg. `60`
 - **raindrop_tag**: a string, only library items with this tag will be selected in the Raindrop collection. eg. `'post-to-twitter'`
 - **tweet_format**: a string, the content of the tweet with placeholders with the library item attributes.
-- **default_image_url**: a string, the link to the image to display with the tweet if the library item doesn't have a corresponding image. The image will be reframed by twitter. If the image url doesn't work, twitter will gracefully fall back onto not displaying an image with the tweet.
+- **default_image_url**: a string, the link to the image to display with the tweet if the library item doesn't have a corresponding image. The image will be reframed by twitter. If the image url doesn't work, the bot will gracefully fall back onto not displaying an image with the tweet.
 
 > The bot polls the config to check for changes every 5 minutes. Therefore there may be up to 5 minutes before any change is implemented. If the tweeting interval has changed to `X` min and there are `<X` min since the last tweet before the config was changed, the next tweet will be `X` min after the latest tweet.
 
