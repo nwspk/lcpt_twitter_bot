@@ -56,16 +56,10 @@ def choose_item(items):
       - randomly choosing
     '''
 
-    raindrop_tag = load_config()['raindrop_tag']
-
-    already_tweeted = set()
     choose_one = random.choice
 
-    ## TODO maybe some zipping can happen here for efficiency ?
-    not_already_tweeted_ids = set([ i.id for i in items]) - set(already_tweeted)
-    items = [ i for i in items if i.id in not_already_tweeted_ids ]
-
-    #items = [ i for i in items if raindrop_tag in it.tags ]
+    raindrop_tag = load_config()['raindrop_tag']
+    items = [ i for i in items if raindrop_tag in i.tags ]
 
     try:
         item = choose_one(items)

@@ -5,7 +5,7 @@
 running: true
 
 # in minutes, the tweeting interval
-interval: 1
+interval: 20
 
 raindrop_tag: 'post-to-twitter'
 
