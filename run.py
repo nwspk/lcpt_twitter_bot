@@ -96,6 +96,7 @@ def transform_item(item):
 def publish_item(item):
     '''
     TODO have a Tweet class (subclassed from Item) with transform and publish methods ? images are published differently than simple text updates
+    TODO very ugly try except cascade, refactor it
     '''
 
     default_image_url = load_config()['default_image_url']
@@ -134,8 +135,12 @@ def publish_item(item):
         except Exception as error:
             logging.error('Exception:', exc_info=True)
 
-            twitter_api.update_status(status=item['string'])
+            try:
+                twitter_api.update_status(status=item['string'])
 
+            except tweepy.TweepError as error:
+                logging.error('Exception:', exc_info=True)
+                pass
 
     logging.info('Tweeted:\n===\n{}\n==='.format(item['string']))
     return
