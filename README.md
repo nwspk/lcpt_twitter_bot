@@ -10,7 +10,7 @@ How to configure
 The following features are customisable by changing their values in the [config file](https://github.com/nwspk/lcpt_twitter_bot/blob/main/config.yml):
 
 - **running**: a boolean, `true` or `false`, turns the bot on and off
-- **interval**: an integer, the amount of minutes between posting tweets. eg. `60`
+- **interval**: an integer, the amount of minutes between posting tweets. eg. `60`. Minimum is every `5` minutes; Bot won't take into account a tweeting interval shorter than the polling interval (5min)
 - **raindrop_tag**: a string, only library items with this tag will be selected in the Raindrop collection. eg. `'post-to-twitter'`
 - **tweet_format**: a string, the content of the tweet with placeholders with the library item attributes.
 - **default_image_url**: a string, the link to the image to display with the tweet if the library item doesn't have a corresponding image. The image will be reframed by twitter. If the image url doesn't work, the bot will gracefully fall back onto not displaying an image with the tweet.

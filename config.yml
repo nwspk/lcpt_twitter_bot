@@ -4,7 +4,7 @@
 # boolean, true or false, turns the bot on and off
 running: true
 
-# in minutes, the tweeting interval
+# in minutes, the tweeting interval. Minimum is every 5 minutes; Bot won't take into account a tweeting interval shorter than the polling interval (5min)
 interval: 20
 
 raindrop_tag: 'post-to-twitter'
