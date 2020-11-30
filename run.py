@@ -27,6 +27,9 @@ from helpers import fetch_interval_since_last_tweet
 from helpers import CREDENTIALS
 
 
+ITEMS = []
+
+
 def fetch_items():
     '''
     TODO using a RaindropFetcher and its method
@@ -43,6 +46,8 @@ def fetch_items():
         items.extend(page_items)
         page += 1
 
+    raindrop_tag = load_config()['raindrop_tag']
+    items = [ i for i in items if raindrop_tag in i.tags ]
     logging.info('Collected {} items from Raindrop'.format(len(items)))
 
     return items
@@ -57,9 +62,6 @@ def choose_item(items):
     '''
 
     choose_one = random.choice
-
-    raindrop_tag = load_config()['raindrop_tag']
-    items = [ i for i in items if raindrop_tag in i.tags ]
 
     try:
         item = choose_one(items)
@@ -151,11 +153,16 @@ def bot():
     TODO might be cleaner not to fetch whole Raindrop library every 10 min & instead batch
     TODO separate out the task from the scheduling
     '''
+    global ITEMS
 
-    items = fetch_items()
-    item = choose_item(items=items)
+    ITEMS = ITEMS if len(ITEMS) > 0 else fetch_items()
+    logging.debug('There are {} number of items left to publish'.format(len(ITEMS)))
+    item = choose_item(items=ITEMS)
     publishable = transform_item(item=item)
     publish_item(item=publishable)
+
+    ITEMS.remove(item)
+    logging.debug('Removed item {} from list of items to publish'.format(item.id))
 
     return
 
