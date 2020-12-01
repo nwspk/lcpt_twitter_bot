@@ -9,7 +9,7 @@ interval: 20
 
 raindrop_tag: 'post-to-twitter'
 
-tweet_format: '{title:.60}\n{description:.100}\n{url}'
+tweet_format: '{title:.60}\n{description:.195}\n{url}'
 
 default_image_url: 'https://www.dropbox.com/s/97g0fror3egbq9w/v3%20demo.jpg?dl=0'
 
