@@ -1,7 +1,7 @@
 Twitter Bot Service with Raindrop Integration
 ===
 
-Service to automatically tweet selection of [raindrop.io](raindrop.io) items at regular intervals via the [@lcptuk](https://twitter.com/lcptuk) twitter account.
+Service to automatically tweet selection of [raindrop.io](https://raindrop.io) items at regular intervals via the [@lcptuk](https://twitter.com/lcptuk) twitter account.
 
 
 How to configure
