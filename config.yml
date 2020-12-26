@@ -5,7 +5,7 @@
 running: true
 
 # in minutes, the tweeting interval. Minimum is every 5 minutes; Bot won't take into account a tweeting interval shorter than the polling interval (5min)
-interval: 20
+interval: 30
 
 raindrop_tag: 'post-to-twitter'
 
